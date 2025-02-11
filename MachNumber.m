@@ -1,43 +1,24 @@
-% READ ME
-% This function will take in either the mach number or flight speed in miles per hour as a
-% variable 'flight' as well as a temperature 'temp' and return both the
-% speed and mach number.
-%
-% This function is only valid for temperatures between -40 and 25 C, due to
-% gas constants, and up to Mach 10.
+function mach = MachNumber(speed, temp, variation)
 
-function [speed, mach] = MachNumber(flight, temp)
+% Function finds the mach number for speeds, by taking an argument at the
+% end that changes the units that are used
 
 % Constants
 % /////////////////////////////////////////////////////////////////////////
 % Gas Constant
 R = 287; % 287 for air, change if necessary
 K = 1.401; % Note that this is only valid for T = -40 to 25 C
-% % Specific heat of constant pressure
-% Cp = 1.005; % 1.005 for air, change if necessary
-% % SPecific heat of constant volume, change if necessary
-% Cv = 0.718; % 0.718 for air, change if necessary
 % /////////////////////////////////////////////////////////////////////////
 
-% Conversions
+% Calculations speed in meters per second
 % /////////////////////////////////////////////////////////////////////////
-flightmps = flight / 2.237;
-if temp + 273.15 > 233.15
-    tempk = temp + 273.15;
+if strcmp(variation,'miles/h') == 1
+    mach = (speed/2.237) / sqrt(K*R*temp);
+elseif strcmp(variation,'knots') == 1
+    mach = (speed/1.944) / sqrt(K*R*temp);
+elseif strcmp(variation,'km/h') == 1
+    mach = (speed/3.6) / sqrt(K*R*temp);
 else
-    tempk = temp;
-end
-% /////////////////////////////////////////////////////////////////////////
-
-% Calculations
-% /////////////////////////////////////////////////////////////////////////
-    if flightmps < 10
-        speed = flight * sqrt(K*R*tempk);
-        mach = flight;
-    end
-    if flightmps > 10
-        mach = flightmps / sqrt(K*R*tempk);
-        speed = flight;
-    end
+        mach = speed / sqrt(K*R*temp);
 end
 % /////////////////////////////////////////////////////////////////////////
